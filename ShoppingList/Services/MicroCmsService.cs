@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
+using System.Reflection;
 
 namespace ShoppingList.Services
 {
@@ -14,11 +17,15 @@ namespace ShoppingList.Services
 
         public MicroCmsService()
         {
+            var config = LoadConfiguration();
+            string baseUrl = config["MicroCms:BaseUrl"] ?? "https://shopping-list.microcms.io/api/v1/";
+            string apiKey = config["MicroCms:ApiKey"] ?? string.Empty;
+
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri("https://shopping-list.microcms.io/api/v1/")
+                BaseAddress = new Uri(baseUrl)
             };
-            _httpClient.DefaultRequestHeaders.Add("X-MICROCMS-API-KEY", "kT4DYRTJKyl6cjanFgZ5d58h3aCjy6WCY5SQ");
+            _httpClient.DefaultRequestHeaders.Add("X-MICROCMS-API-KEY",apiKey);
         }
 
         public async Task<List<Item>> GetItemAsync()
@@ -96,6 +103,15 @@ namespace ShoppingList.Services
             {
                 Console.WriteLine($"Request error: {e.Message}");
             }
+        }
+
+        private IConfiguration LoadConfiguration()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory) // 実行ディレクトリを指定
+                .AddJsonFile("appsettings.Local.json", optional: false, reloadOnChange: true);
+
+            return builder.Build();
         }
     }
 

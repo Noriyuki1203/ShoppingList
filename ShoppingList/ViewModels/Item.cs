@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ShoppingList.ViewModels
 {
@@ -19,6 +20,8 @@ namespace ShoppingList.ViewModels
         }
 
         public string Id { get; set; }
+
+        [JsonProperty("createdat")]
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime PublishedAt { get; set; }

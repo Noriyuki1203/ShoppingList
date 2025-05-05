@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using ShoppingList.ViewModels;
 using ShoppingList.Services;
+using System.Diagnostics;
 
 namespace ShoppingList.ViewModels
 {
@@ -50,9 +51,13 @@ namespace ShoppingList.ViewModels
             var items = await _service.GetItemAsync();
             if (items != null)
             {
-                var sortedItems = items.OrderByDescending(item => item.CreatedAt).ToList(); // 追加された部分
+                var sortedItems = items.OrderBy(item => item.CreatedAt).ToList(); // 追加された部分
                 foreach (var item in sortedItems)
                 {
+                    // 動作確認用コード
+                    string path = Path.Combine(FileSystem.AppDataDirectory, "log.txt");
+                    File.AppendAllText(path, $"ログ出力: {item.CreatedAt}/{item.Name}\n");
+
                     Items.Add(item);
                 }
             }
