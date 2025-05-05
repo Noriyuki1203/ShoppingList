@@ -54,10 +54,6 @@ namespace ShoppingList.ViewModels
                 var sortedItems = items.OrderBy(item => item.CreatedAt).ToList(); // 追加された部分
                 foreach (var item in sortedItems)
                 {
-                    // 動作確認用コード
-                    string path = Path.Combine(FileSystem.AppDataDirectory, "log.txt");
-                    File.AppendAllText(path, $"ログ出力: {item.CreatedAt}/{item.Name}\n");
-
                     Items.Add(item);
                 }
             }
